@@ -1,132 +1,84 @@
-﻿using System;
+using System;
 
-namespace ConsoleApp1;
-
-// ============================
-// Q1: تعريف كلاس Book
-// ============================
-public class Book
+namespace BookAssignment
 {
-public string Title { get; set; }
-public int Pages { get; set; }
-}
-
-class Program
-{
-static void Main(string[] args)
-{
-    // =========================================================
-    // Q1: عمل object من كلاس Book وتخزينه في متغير من نوع object
-    // =========================================================
-    Console.WriteLine("===== Q1: Book object =====");
-    Book book = new Book { Title = "The Hobbit", Pages = 310 };
-    object obj = book;
-    Console.WriteLine(obj); // هيطبع اسم الكلاس لأننا مسويناش override لـ ToString()
-    Console.WriteLine();
-
-    // =========================================================
-    // Q2: ToString(), Equals(), GetHashCode(), GetType()
-    // =========================================================
-    Console.WriteLine("===== Q2: Object methods =====");
-    Console.WriteLine(book.ToString());
-    Console.WriteLine(book.Equals(book));
-    Console.WriteLine(book.GetHashCode());
-    Console.WriteLine(book.GetType());
-    Console.WriteLine();
-
-    // =========================================================
-    // Q3: compile-time error (متعلق - مش هيتشغل، اتقفلت كتعليق)
-    // int pages3 = "464";  // Compile-time error: can't assign string to int
-    // =========================================================
-    Console.WriteLine("===== Q3: Compile-time error (see comment in code) =====");
-    int pages3 = 464; // النسخة المصححة
-    Console.WriteLine(pages3);
-    Console.WriteLine();
-
-    // =========================================================
-    // Q4: Divide by zero - try/catch/finally
-    // =========================================================
-    Console.WriteLine("===== Q4: Divide by zero =====");
-    try
+    enum Genre
     {
-        int a = 10;
-        int b = 0;
-        int result = a / b;
-        Console.WriteLine(result);
+        Fiction,
+        NonFiction,
+        Science
     }
-    catch (DivideByZeroException)
+
+    class Book
     {
-        Console.WriteLine("Cannot divide by zero");
+        private string password = "secret";
+        internal int copiesInStock = 5;
+        public string Title;
+        public Genre BookGenre;
     }
-    finally
+
+    class Program
     {
-        Console.WriteLine("Done");
+        static void Main(string[] args)
+        {
+            Book book = new Book();
+
+            // question 1
+            // book.password ==> can't access it here, it's private
+            // if we try to print book.password it will give compile error
+            // because private members can only be used inside the same class
+
+            // question 2
+            // internal fields can be accessed anywhere in the same project
+            Console.WriteLine("copiesInStock = " + book.copiesInStock);
+
+            // question 3
+            book.Title = "Clean Code";
+            Console.WriteLine("Title = " + book.Title);
+
+            // question 4
+            book.BookGenre = Genre.Science;
+            Console.WriteLine("Genre = " + book.BookGenre);
+
+            // question 5
+            // casting enum to int to get the underlying number
+            int fictionNum = (int)Genre.Fiction;
+            int nonFictionNum = (int)Genre.NonFiction;
+            int scienceNum = (int)Genre.Science;
+            Console.WriteLine("Fiction = " + fictionNum);
+            Console.WriteLine("NonFiction = " + nonFictionNum);
+            Console.WriteLine("Science = " + scienceNum);
+
+            // question 6
+            int genreNumber = 1;
+            Genre g1 = (Genre)genreNumber;
+            Console.WriteLine("genre from number = " + g1);
+
+            // question 7
+            Genre g2 = Genre.Fiction;
+            string genreStr = g2.ToString();
+            Console.WriteLine("genre as string = " + genreStr);
+
+            // question 8
+            string genreText = "Science";
+            Genre g3 = (Genre)Enum.Parse(typeof(Genre), genreText);
+            Console.WriteLine("parsed genre = " + g3);
+
+            // question 9
+            string genreText2 = "Mystery";
+            Genre g4;
+            bool ok = Enum.TryParse(genreText2, out g4);
+
+            if (ok)
+            {
+                Console.WriteLine("genre = " + g4);
+            }
+            else
+            {
+                Console.WriteLine("Unknown genre");
+            }
+
+            Console.ReadLine();
+        }
     }
-    Console.WriteLine();
-
-    // =========================================================
-    // Q5: Implicit conversion (int -> double)
-    // =========================================================
-    Console.WriteLine("===== Q5: Implicit conversion =====");
-    int pages5 = 300;
-    double pagesAsDouble = pages5;
-    Console.WriteLine(pagesAsDouble);
-    Console.WriteLine();
-
-    // =========================================================
-    // Q6: Explicit conversion / cast (double -> int)
-    // =========================================================
-    Console.WriteLine("===== Q6: Explicit conversion (cast) =====");
-    double price = 49.99;
-    int priceAsInt = (int)price;
-    Console.WriteLine(priceAsInt);
-    Console.WriteLine();
-
-    // =========================================================
-    // Q7: Convert class (string -> int)
-    // =========================================================
-    Console.WriteLine("===== Q7: Convert class =====");
-    string pagesText7 = "464";
-    int pages7 = Convert.ToInt32(pagesText7);
-    Console.WriteLine(pages7);
-    Console.WriteLine();
-
-    // =========================================================
-    // Q8: int.Parse() and int.TryParse()
-    // =========================================================
-    Console.WriteLine("===== Q8: Parse and TryParse =====");
-    string yearText = "2023";
-    int year = int.Parse(yearText);
-    Console.WriteLine(year);
-
-    string badText = "abc";
-    if (int.TryParse(badText, out int parsedResult))
-    {
-        Console.WriteLine(parsedResult);
-    }
-    else
-    {
-        Console.WriteLine("Invalid number");
-    }
-    Console.WriteLine();
-
-    // =========================================================
-    // Q9: int -> string, then check its type
-    // =========================================================
-    Console.WriteLine("===== Q9: int to string =====");
-    int pages9 = 464;
-    string pagesText9 = pages9.ToString();
-    Console.WriteLine(pagesText9.GetType());
-    Console.WriteLine();
-
-    // =========================================================
-    // Q10: Boxing and Unboxing
-    // =========================================================
-    Console.WriteLine("===== Q10: Boxing and Unboxing =====");
-    int copies = 100;
-    object boxed = copies;      // boxing
-    int unboxed = (int)boxed;   // unboxing
-    Console.WriteLine(boxed);
-    Console.WriteLine(unboxed);
-}
 }
